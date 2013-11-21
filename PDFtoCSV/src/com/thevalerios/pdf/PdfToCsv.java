@@ -151,7 +151,7 @@ public class PdfToCsv {
 									+ "\",\"" + ordDate + "\",\"" + ordPercent
 									+ "\",\"" + ordAmount + "\",\"" + ordCost
 									+ "\",\"" + ordGP + "\",\"" + ordShipDate
-									+ "\",\"" + ordCustName + "\"," + custPO + "\"," + src + "\"");
+									+ "\",\"" + ordCustName + "\",\"" + custPO + "\",\"" + src + "\"");
 							System.out.println("curSlsRep = " + curSlsRep);
 							System.out.println("orderNum = " + orderNum);
 							System.out.println("ordDate = " + ordDate);
