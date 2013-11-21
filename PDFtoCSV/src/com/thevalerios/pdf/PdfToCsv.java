@@ -95,7 +95,7 @@ public class PdfToCsv {
 					inSlsRep = true;
 					System.out.println("new sales person");
 					curSlsRep = token.substring(token.indexOf(":") + 2,
-							token.length());
+							token.length()).trim();
 					curCostCenter = this.repMap.get(curSlsRep.substring(0, curSlsRep.indexOf(" ")));
 					if (curCostCenter == null){
 						curCostCenter = "";
@@ -147,7 +147,7 @@ public class PdfToCsv {
 							}
 							String custPO = items[items.length - 1];
 							// out.println("OrdNum,       OrdDate,         OrdPercent,     OrdAmount,          OrdCost,        OrdGP,           OrdShipDate,         OrdCustName,        OrdCustPO");
-							out.println("\"" + curCostCenter + "\",\"" +"\"" + curSlsRep + "\",\"" + orderNum
+							out.println("\"" + curCostCenter + "\",\"" + curSlsRep + "\",\"" + orderNum
 									+ "\",\"" + ordDate + "\",\"" + ordPercent
 									+ "\",\"" + ordAmount + "\",\"" + ordCost
 									+ "\",\"" + ordGP + "\",\"" + ordShipDate
