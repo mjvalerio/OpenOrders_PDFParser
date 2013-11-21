@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.itextpdf.text.io.RandomAccessSourceFactory;
 import com.itextpdf.text.pdf.PRTokeniser;
@@ -13,11 +15,43 @@ import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.RandomAccessFileOrArray;
 
 public class PdfToCsv {
-
+	private boolean columnsWritten = false;
+	private Map<String,String> repMap = null;
+	
+	
 	public static void main(String[] args) {
 		PdfToCsv pdfToCsv = new PdfToCsv();
 		pdfToCsv.processFolder("C:\\Users\\mvalerio\\Documents\\OLAttachments");
 
+	}
+
+	public PdfToCsv() {
+		super();
+		this.columnsWritten = false;
+		this.repMap = new HashMap<String,String>();
+		this.repMap.put("MML", "2030");
+		this.repMap.put("AAH", "2040");
+		this.repMap.put("ATM", "2030");
+		this.repMap.put("BAM", "2021");
+		this.repMap.put("BRH", "2055");
+		this.repMap.put("GSK", "2046");
+		this.repMap.put("JLW", "2030");
+		this.repMap.put("JMN", "2021");
+		this.repMap.put("JRF", "2021");
+		this.repMap.put("JRM", "2021");
+		this.repMap.put("KRB", "2055");
+		this.repMap.put("KSH", "2021");
+		this.repMap.put("PCA1", "2021");
+		this.repMap.put("PDR", "2030");
+		this.repMap.put("PJD", "2040");
+		this.repMap.put("RHH", "2012");
+		this.repMap.put("RLC", "2040");
+		this.repMap.put("RWS", "2021");
+		this.repMap.put("SKC", "2021");
+		this.repMap.put("SMD1", "2030");
+		this.repMap.put("PDR", "2030");
+		this.repMap.put("TDH", "2040");
+		this.repMap.put("WAW", "2021");
 	}
 
 	public void processFolder(String folder) {
@@ -46,9 +80,13 @@ public class PdfToCsv {
 		PRTokeniser tokenizer = new PRTokeniser(new RandomAccessFileOrArray(
 				new RandomAccessSourceFactory().createSource(streamBytes)));
 		PrintWriter out = new PrintWriter(new FileOutputStream(dest, true));
-		out.println("SalesRep, OrdNum,OrdDate,OrdPercent,OrdAmount,OrdCost,OrdGP,OrdShipDate,OrdCustName,OrdCustPO");
+		if (!this.columnsWritten){
+			out.println("CostCenter, SalesRep, OrdNum,OrdDate,OrdPercent,OrdAmount,OrdCost,OrdGP,OrdShipDate,OrdCustName,OrdCustPO,SrcFile");
+			this.columnsWritten=true;
+		}
 
 		String curSlsRep = null;
+		String curCostCenter = null;
 		while (tokenizer.nextToken()) {
 			if (tokenizer.getTokenType() == PRTokeniser.TokenType.STRING) {
 				String token = tokenizer.getStringValue();
@@ -58,7 +96,11 @@ public class PdfToCsv {
 					System.out.println("new sales person");
 					curSlsRep = token.substring(token.indexOf(":") + 2,
 							token.length());
-					System.out.println("curSlsRep=" + curSlsRep);
+					curCostCenter = this.repMap.get(curSlsRep.substring(0, curSlsRep.indexOf(" ")));
+					if (curCostCenter == null){
+						curCostCenter = "";
+					}
+					//System.out.println("curSlsRep=" + curSlsRep);
 				} else if (token.startsWith("Order#")) {
 					inOrder = true;
 				} else if (token.startsWith("Slsm Totals:")) {
@@ -67,7 +109,11 @@ public class PdfToCsv {
 					// inOrder=false;
 				} else if (token.startsWith("PO#")) {
 
-				} else {
+				} else if (token.startsWith("Remarks:")){
+				} else if (token.contains("----")){
+					
+				}
+				else {
 					if (inSlsRep && inOrder) {
 						String[] items = token.split("\\s+");
 						String ordCustName = new String();
@@ -101,11 +147,12 @@ public class PdfToCsv {
 							}
 							String custPO = items[items.length - 1];
 							// out.println("OrdNum,       OrdDate,         OrdPercent,     OrdAmount,          OrdCost,        OrdGP,           OrdShipDate,         OrdCustName,        OrdCustPO");
-							out.println("\"" + curSlsRep + "\",\"" + orderNum
+							out.println("\"" + curCostCenter + "\",\"" +"\"" + curSlsRep + "\",\"" + orderNum
 									+ "\",\"" + ordDate + "\",\"" + ordPercent
 									+ "\",\"" + ordAmount + "\",\"" + ordCost
 									+ "\",\"" + ordGP + "\",\"" + ordShipDate
-									+ "\",\"" + ordCustName + "\"," + custPO);
+									+ "\",\"" + ordCustName + "\"," + custPO + "\"," + src + "\"");
+							System.out.println("curSlsRep = " + curSlsRep);
 							System.out.println("orderNum = " + orderNum);
 							System.out.println("ordDate = " + ordDate);
 							System.out.println("ordPercent = " + ordPercent);
