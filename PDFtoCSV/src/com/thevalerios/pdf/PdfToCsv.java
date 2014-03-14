@@ -25,7 +25,7 @@ public class PdfToCsv {
 
 	public static void main(String[] args) {
 		PdfToCsv pdfToCsv = new PdfToCsv();
-		pdfToCsv.processFolder("C:\\Users\\mvalerio\\Documents\\OLAttachments");
+		pdfToCsv.processFolder("C:\\Users\\MattValerio\\Desktop\\temp\\OpenOrdersReport");
 
 	}
 
