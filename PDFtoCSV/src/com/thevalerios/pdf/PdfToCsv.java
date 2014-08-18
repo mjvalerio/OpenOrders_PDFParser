@@ -112,8 +112,13 @@ public class PdfToCsv {
 				if (token.startsWith("For Slsm:")) {
 					inSlsRep = true;
 //					System.out.println("new sales person");
-					curSlsRep = token.substring(token.indexOf(":") + 2,
-							token.length()).trim();
+					
+					if (token.indexOf("Date:") > 0) {//last sls rep of the file contains the date of the report
+						curSlsRep = token.substring(token.indexOf(":") + 2,token.indexOf("Date:")).trim();
+					} else {
+						curSlsRep = token.substring(token.indexOf(":") + 2,token.length()).trim();
+					}
+					
 					curCostCenter = this.repMap.get(curSlsRep.substring(0,
 							curSlsRep.indexOf(" ")));
 					if (curCostCenter == null) {
