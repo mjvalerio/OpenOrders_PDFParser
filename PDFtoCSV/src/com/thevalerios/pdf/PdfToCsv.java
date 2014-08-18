@@ -58,6 +58,11 @@ public class PdfToCsv {
 		this.repMap.put("PDR", "2030");
 		this.repMap.put("TDH", "2040");
 		this.repMap.put("WAW", "2021");
+		this.repMap.put("MDS1", "2040");
+		this.repMap.put("RDL", "2040");
+		this.repMap.put("AMK", "2040");
+		this.repMap.put("MWC1", "2021");
+		this.repMap.put("CMH1", "2021");
 	}
 
 	public void processFolder(String folder) {
@@ -131,8 +136,8 @@ public class PdfToCsv {
 						String[] items = token.split("\\s+");
 						String ordCustName = new String();
 						if (items.length > 6) {
-//							System.out.println(items.length);
-							String orderNum = items[0];
+							System.out.println("items.length = " + items.length);
+							String orderNum = items[0].trim();
 							if (!this.entryMap.containsKey(orderNum)) {
 								System.out.println(orderNum + " is being added to the entry Map");
 								this.entryCounter++;
@@ -216,15 +221,13 @@ public class PdfToCsv {
 		Iterator<String> iterator = values.iterator();
 		int counter = 0;
 		while(iterator.hasNext()){
-//		for (iterator = this.entryMap.values().iterator(); iterator
-//				.hasNext();) {
 			String entry = (String) iterator.next();
 			out.println(entry);
 			counter++;
-			System.out.println("-------------------------------");
-			System.out.println(entry);
-			System.out.println(counter);
-			System.out.println("-------------------------------");
+//			System.out.println("-------------------------------");
+//			System.out.println(entry);
+//			System.out.println(counter);
+//			System.out.println("-------------------------------");
 		}
 		out.flush();
 		out.close();
