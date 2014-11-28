@@ -117,12 +117,13 @@ public class PdfToCsv {
 						curSlsRep = token.substring(token.indexOf(":") + 2,token.indexOf("Date:")).trim();
 					} else {
 						curSlsRep = token.substring(token.indexOf(":") + 2,token.length()).trim();
+						System.out.println(curSlsRep);
 					}
 					
 					curCostCenter = this.repMap.get(curSlsRep.substring(0,
 							curSlsRep.indexOf(" ")));
 					if (curCostCenter == null) {
-						curCostCenter = "";
+						//curCostCenter = "";
 					}
 					// System.out.println("curSlsRep=" + curSlsRep);
 				} else if (token.startsWith("Order#")) {
@@ -141,12 +142,12 @@ public class PdfToCsv {
 						String[] items = token.split("\\s+");
 						String ordCustName = new String();
 						if (items.length > 6) {
-							System.out.println("items.length = " + items.length);
+//							System.out.println("items.length = " + items.length);
 							String orderNum = items[0].trim();
 							if (!this.entryMap.containsKey(orderNum)) {
-								System.out.println(orderNum + " is being added to the entry Map");
+//								System.out.println(orderNum + " is being added to the entry Map");
 								this.entryCounter++;
-								System.out.println("Entry Counter = " + this.entryCounter);
+//								System.out.println("Entry Counter = " + this.entryCounter);
 								String ordDate = items[1];
 								String ordPercent = items[2];
 								String ordAmount = items[3];
@@ -222,7 +223,7 @@ public class PdfToCsv {
 			this.columnsWritten = true;
 		}
 		Collection<String> values = this.entryMap.values();
-		System.out.print("Number of entries = " + values.size());
+//		System.out.print("Number of entries = " + values.size());
 		Iterator<String> iterator = values.iterator();
 		int counter = 0;
 		while(iterator.hasNext()){
